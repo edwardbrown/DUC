@@ -1,0 +1,43 @@
+;; DUC
+;; Copyright (c) 2004 Edward G. Brown
+;; All rights reserved.
+;;
+;; Macros
+
+%macro sys.exit 0
+        system SYS_exit
+%endmacro   
+
+%macro sys.read 0
+        system SYS_read
+%endmacro
+
+%macro sys.write 3
+
+        push dword %1		; put length of a String on stack
+        push dword %2		; address of a String. (Push a 32-bit pointer to the message on the stack).
+        push dword %3		; file desc for stdout
+
+        system SYS_write
+
+	add esp, byte 12        ; Clean stack 3 * 4
+
+%endmacro
+
+%macro sys.open 0
+        system SYS_open
+%endmacro   
+
+%macro sys.close 0
+        system SYS_close
+%endmacro 
+
+%macro sys.rename 2
+
+        push dword %1         ; the to arg, name we're renaming to
+        push dword %2         ; the from arg, name we're renaming from
+
+        system SYS_rename
+
+	add esp, byte 8         ; Clean stack (2 stack push * 4 bytes).
+%endmacro 

@@ -1,0 +1,125 @@
+DUC
+Copyright (c) 2004 Edward G. Brown
+All rights reserved.
+
+Description
+===========
+
+ DUC: Displace Unprintable Characters (or Displace Unwanted Characters)
+
+ This program will strip unprintable characters and other junk from filenames.
+ This is particularly useful when dealing with mounted drives, containing
+ files from another OS. It uses rename to accomplish this. 
+
+ DUC is written in assembly, Intel syntax for NASM. Given the widespread 
+ use of gcc, gcc is needed to build. If you want to use ld directly, feel 
+ free, but you'll have to tinker with it, I haven't been as patient thus far.
+
+
+How to install
+==============
+
+ REQUIREMENTS:
+
+	1) i386 or better
+
+	2) UNIX style Kernel
+
+	3) nasm 0.98 or greater
+	
+           NOTE: If you don't do much assembly work, chances are
+	         nasm isn't installed on your system by default.
+                 Look for ports or rpms or get the source at:
+
+		 http://nasm.sourceforge.net/	
+
+           Also, it may be possible to assemble with something other
+           than nasm, gas for example, but you'll have to translate 
+           it using something like intel2gas. Let me know if it works.
+
+	4) gcc (it's assumed you also have ld) 
+
+	   NOTE: has been tested with 3.0.4 
+		 earlier gcc is untested ground
+		 but *should* be fine
+
+
+
+ TO INSTALL:
+
+    Before proceeding, edit the file inc/EDITME.inc 
+    and make sure to uncomment the line defining your OS
+
+    For example: %define BSD
+
+    Then
+
+	1) make
+
+	2) make install
+
+	   NOTE: installs to /usr/local/bin by default
+		 edit Makefile if you wish to put it 
+		 somewhere else, or do so manally
+
+	3) make clean [optionaly removes object files]
+
+
+	gmake should also work
+
+Usage
+=====
+
+     One excellent usage for duc is when coming upon
+     a file like this, from a mounted drive or a file 
+     sharing search for example:
+
+          \303\205my favorite song - favorite album.mp3
+
+     This is what is displayed when using ls -b for display.
+     The 303 and 205 are octal representations of an extended
+     ASCII character which your terminal won't display (unless
+     you've told it to).
+
+     Ordinarily the file would look like this (without -b):
+
+          ??my favorite song - favorite album.mp3
+
+     One can rename the file by doing something like this:
+
+	mv *album.mp3 my\ favorite\ song\ -\ favorite\ album.mp3
+
+     But if you're truly lazy you can use duc to change the name:
+
+	duc -s *album.mp3   and you get:
+
+          __my favorite song - favorite album.mp3
+
+     If you don't want the spaces you can leave out -s and get:
+
+          __my_favorite_song_-_favorite_album.mp3
+
+     Later, if you change your mind, and want the spaces back for
+     some reason, use the -r (restore) switch. (One curiosity about how
+     -r works, well try it on a file that already has spaces and see ;)
+
+     To test what will happen simply pass -t to duc.
+
+     Ordinarily, characters like ! ' [ ( $ etc. are replaced by
+     underscores but if you want them to remain pass -n
+
+     If you don't want underscores and just want to delete the offensive
+     characters, pass -d
+
+     Type duc -h for help page
+
+     IMPORTANT: use -t in combination with other options if you are nervous about
+     what will happen to your file. It will show you the various options you have
+
+
+Feedback
+========
+
+ Comments? Suggestions? Abuse? email: ed@lexingrad.net
+
+Quack

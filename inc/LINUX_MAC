@@ -1,0 +1,53 @@
+;; DUC
+;; Copyright (c) 2004 Edward G. Brown
+;; All rights reserved.
+;;
+;; Macros 
+
+%macro sys.exit 0
+        system SYS_exit
+%endmacro   
+
+%macro sys.read 0
+        system SYS_read
+%endmacro
+
+%macro sys.write 3
+
+ 	push ebx 		; first lets store our registers
+	push ecx
+	push edx
+
+	mov edx,%1		;message length
+	mov ecx,%2		;message to write
+	mov ebx,%3 		;file descriptor (stdout)
+				
+        system SYS_write	; do the writing
+
+	pop 	edx		; get them back out correctly
+	pop 	ecx
+	pop 	ebx
+
+%endmacro
+
+%macro sys.open 0
+        system SYS_open
+%endmacro   
+
+%macro sys.close 0
+        system SYS_close
+%endmacro 
+
+%macro sys.rename 2
+
+	push ecx		; first lets store our registers
+	push ebx
+
+	mov ecx,%1		; the to arg, name we're renaming to
+	mov ebx,%2		; the from arg, name we're renaming from
+
+        system SYS_rename
+
+	pop 	ebx		; get them back out correctly
+	pop 	ecx
+%endmacro 
